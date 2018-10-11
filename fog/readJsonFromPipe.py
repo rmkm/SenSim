@@ -7,7 +7,10 @@ sys.stdin.close()
 
 dict = json.loads(data)
 
-with open('/home/morishima/workspace/python/testlog.json', 'w') as f:
+for keys,values in dict.items():
+    print key, "=>", val
+
+with open('/home/morishima/workspace/simpleFog/fog/testlog.json', 'w') as f:
     f.write(json.dumps(dict))
 
 criterion = 50
