@@ -1,7 +1,6 @@
 import sys
 import json
-#from pprint import pprint
-#from collections import OrderedDict
+
 data = sys.stdin.read()
 sys.stdin.close()
 
@@ -22,6 +21,3 @@ else:
     #sys.stdout.close()
 
 sys.stdout.close()
-
-#sys.stdout.write("test")
-#sys.stdout.close()
