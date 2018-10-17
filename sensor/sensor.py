@@ -1,15 +1,16 @@
 from datetime import datetime
 from collections import OrderedDict
+from datetime import datetime
 import subprocess as sb
-import sys
-import json
-import time, random
+import sys, json, time, random
 
 SEND_NUM = 10
 SLP_TIME = 3
-IP = "192.168.1.33"
-PORT = 8080
-dict = OrderedDict()
+IP = sys.argv[1]
+PORT = sys.argv[2]
+
+if (IP is None) or (PORT is None):
+    print('Usage: ".py [ip_address] [port]" \n')
 
 def netcat(ipaddr, port):
     cmd = 'nc %s %s' % (ipaddr, port)
@@ -17,23 +18,32 @@ def netcat(ipaddr, port):
 
 ncPipe = netcat(IP, PORT)
 
+measurement = "temperature"
+deviceID = "MOKA-01"
+region = 1
+
 for i in range(SEND_NUM):
 
-    device_id = "Test_Device_0001"
-    date = datetime.now().replace(microsecond=0).isoformat()
+    time = datetime.now().replace(microsecond=0).isoformat()
     temperature = random.randint(0,100)
-    dict["device_id"] = device_id
-    dict["date"] = date
-    dict["temperature"] = temperature
 
-    msg = json.dumps(dict)
+    json_body = [
+    {
+        "measurement": measurement,
+            "tags": {
+                "host": deviceID,
+                "region": region
+            },
+            "time": time,
+            "fields": {
+                "value": temperature,
+            }
+        }
+    ]
+
+    msg = json.dumps(json_body)
     msg += "\n"
 
     ncPipe.stdin.write(str(msg))
     ncPipe.stdin.flush()
     time.sleep(SLP_TIME)
-
-#with open('normal.json', 'wt') as f:
-#    json.dump(dict, f)
-
-#print(dict)

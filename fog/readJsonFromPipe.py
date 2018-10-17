@@ -7,15 +7,12 @@ sys.stdin.close()
 
 dict = json.loads(data)
 
-for keys,values in dict.items():
-    print key, "=>", val
-
 with open('/home/morishima/workspace/simpleFog/fog/testlog.json', 'w') as f:
     f.write(json.dumps(dict))
 
-criterion = 50
+threshold = 50
 
-if dict["temperature"] >= criterion:
+if dict["temperature"] >= threshold:
     msg = "forward"
     sys.stdout.write(str(msg))
     #sys.stdout.close()
