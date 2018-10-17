@@ -2,7 +2,8 @@ from datetime import datetime
 from collections import OrderedDict
 from datetime import datetime
 import subprocess as sb
-import sys, json, time, random
+import time as tm
+import sys, json, random
 
 if(len(sys.argv) != 3):
     print('Usage: ".py [ip_address] [port]" \n')
@@ -12,7 +13,6 @@ SEND_NUM = 10
 SLP_TIME = 3
 IP = sys.argv[1]
 PORT = sys.argv[2]
-
 
 def netcat(ipaddr, port):
     cmd = 'nc %s %s' % (ipaddr, port)
@@ -46,4 +46,4 @@ for i in range(SEND_NUM):
 
     ncPipe.stdin.write(str(msg))
     ncPipe.stdin.flush()
-    time.sleep(SLP_TIME)
+    tm.sleep(SLP_TIME)
