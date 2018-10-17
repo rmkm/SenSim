@@ -4,13 +4,15 @@ from datetime import datetime
 import subprocess as sb
 import sys, json, time, random
 
+if(len(sys.argv) != 3):
+    print('Usage: ".py [ip_address] [port]" \n')
+    sys.exit()
+
 SEND_NUM = 10
 SLP_TIME = 3
 IP = sys.argv[1]
 PORT = sys.argv[2]
 
-if (IP is None) or (PORT is None):
-    print('Usage: ".py [ip_address] [port]" \n')
 
 def netcat(ipaddr, port):
     cmd = 'nc %s %s' % (ipaddr, port)
@@ -27,19 +29,17 @@ for i in range(SEND_NUM):
     time = datetime.now().replace(microsecond=0).isoformat()
     temperature = random.randint(0,100)
 
-    json_body = [
-    {
+    json_body = {
         "measurement": measurement,
-            "tags": {
-                "host": deviceID,
-                "region": region
-            },
-            "time": time,
-            "fields": {
-                "value": temperature,
-            }
+        "tags": {
+            "host": deviceID,
+            "region": region
+        },
+        "time": time,
+        "fields": {
+            "value": temperature,
         }
-    ]
+    }
 
     msg = json.dumps(json_body)
     msg += "\n"

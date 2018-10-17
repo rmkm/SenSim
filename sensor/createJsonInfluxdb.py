@@ -7,8 +7,7 @@ region = 1
 time = datetime.now().replace(microsecond=0).isoformat()
 temperature = 25
 
-json_body = [
-    {
+json_body = {
         "measurement": measurement,
         "tags": {
             "host": deviceID,
@@ -19,7 +18,6 @@ json_body = [
             "value": temperature,
         }
     }
-]
 
 with open('test.json', 'wt') as f:
     json.dump(json_body, f)

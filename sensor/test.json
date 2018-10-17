@@ -1,0 +1,1 @@
+{"measurement": "temperature", "tags": {"host": "Test_Device_0001", "region": 1}, "time": "2018-10-18T02:12:17", "fields": {"value": 25}}

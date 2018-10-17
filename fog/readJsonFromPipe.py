@@ -12,7 +12,7 @@ with open('/home/morishima/workspace/simpleFog/fog/testlog.json', 'w') as f:
 
 threshold = 50
 
-if dict["temperature"] >= threshold:
+if dict["fields"]["value"] >= threshold:
     msg = "forward"
     sys.stdout.write(str(msg))
     #sys.stdout.close()
