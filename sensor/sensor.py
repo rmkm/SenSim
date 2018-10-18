@@ -5,14 +5,14 @@ import subprocess as sb
 import time as tm
 import sys, json, random
 
-if(len(sys.argv) != 3):
-    print('Usage: ".py [ip_address] [port]" \n')
+if(len(sys.argv) != 4):
+    print('Usage: ".py [ip_address] [port] [num of data to send]"')
     sys.exit()
 
-SEND_NUM = 10
 SLP_TIME = 3
 IP = sys.argv[1]
 PORT = sys.argv[2]
+SEND_NUM = sys.argv[3]
 
 def netcat(ipaddr, port):
     cmd = 'nc %s %s' % (ipaddr, port)
