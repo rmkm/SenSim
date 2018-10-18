@@ -12,7 +12,7 @@ if(len(sys.argv) != 4):
 SLP_TIME = 3
 IP = sys.argv[1]
 PORT = sys.argv[2]
-SEND_NUM = sys.argv[3]
+SEND_NUM = int(sys.argv[3])
 
 def netcat(ipaddr, port):
     cmd = 'nc %s %s' % (ipaddr, port)
