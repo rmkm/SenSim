@@ -1,7 +1,6 @@
 #from collections import OrderedDict
 from pytz import timezone
 from datetime import datetime
-#import subprocess as sb
 import time as tm
 import socket, sys, json, random
 

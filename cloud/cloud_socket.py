@@ -1,7 +1,6 @@
 from influxdb import InfluxDBClient
 from ast import literal_eval
-#import subprocess as sb
-import sys, socket
+import sys, socket, select
 
 if(len(sys.argv) != 4):
     print('Usage: ".py [Host] [port] [DB name]" \n')
@@ -15,24 +14,31 @@ DB = sys.argv[3]
 
 client = InfluxDBClient(host='localhost', port=8086, database=DB)
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((HOST, PORT))
-s.listen(1)
-conn, addr = s.accept()
-conn.settimeout(TIME_OUT)
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setblocking(0)
+server.bind((HOST, PORT))
+server.listen(5)
+inputs = [server]
+outputs = []
 
-dictList = []
+while inputs:
+    readable, writable, exceptional = select.select(inputs, outputs, inputs)
+    for s in readable:
+        if s is server:
+            connection, client_address = s.accept()
+            connection.setblocking(0)
+            inputs.append(connection)
+        else:
+            msg = s.recv(256).decode('utf-8')
+            if not msg:
+                break
+            print(msg)
+            dct = literal_eval(msg)
+            dictList = []
+            dictList.append(dct)
+            client.write_points(dictList)
+    for s in exceptional:
+        inputs.remove(s)
+        s.close()
+        del message_queues[s]
 
-while 1:
-    try:
-        msg = conn.recv(256).decode('utf-8')
-    except socket.timeout:
-        break
-    if not msg:
-        break
-    print(msg)
-    dct = literal_eval(msg)
-    dictList.append(dct)
-    client.write_points(dictList)
-
-conn.close()
