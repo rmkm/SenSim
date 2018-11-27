@@ -4,21 +4,25 @@ from datetime import datetime
 import time as tm
 import socket, sys, json, random
 
-if(len(sys.argv) != 5):
-    print('Usage: ".py [path to json config file] [ip address] [port] [num of data to send]"')
+#if(len(sys.argv) != 5):
+#    print('Usage: ".py [path to json config file] [ip address] [port] [num of data to send]"')
+#    sys.exit()
+if(len(sys.argv) != 2):
+    print('Usage: ".py [path to json config file]"')
     sys.exit()
 
-SLP_TIME = 3
 PATH = sys.argv[1]
-IP = sys.argv[2]
-PORT = int(sys.argv[3])
-SEND_NUM = int(sys.argv[4])
-
 config_file = open(PATH, "r");
 config_dict = json.loads(config_file.read())
+
+HOST = config_dict["host"]
+REGION = config_dict["region"]
+PORT = config_dict["dst port"]
+IP = config_dict["dst ip"]
+SEND_NUM = config_dict["num"]
+SLP_TIME = config_dict["sleep time"]
+
 measurement = "temperature"
-host = config_dict["host"]
-region = config_dict["region"]
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((IP, PORT))
@@ -31,8 +35,8 @@ for i in range(SEND_NUM):
     json_body = {
         "measurement": measurement,
         "tags": {
-            "host": host,
-            "region": region
+            "host": HOST,
+            "region": REGION
         },
         "time": str(time),
         "fields": {
