@@ -1,12 +1,9 @@
-#from collections import OrderedDict
 from pytz import timezone
 from datetime import datetime
 import time as tm
+import numpy as np
 import socket, sys, json, random
 
-#if(len(sys.argv) != 5):
-#    print('Usage: ".py [path to json config file] [ip address] [port] [num of data to send]"')
-#    sys.exit()
 if(len(sys.argv) != 2):
     print('Usage: ".py [path to json config file]"')
     sys.exit()
@@ -23,6 +20,7 @@ SEND_NUM = config_dict["num"]
 SLP_TIME = config_dict["sleep time"]
 
 measurement = "temperature"
+mu, sigma = 25, 10
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((IP, PORT))
@@ -30,7 +28,7 @@ s.connect((IP, PORT))
 for i in range(SEND_NUM):
 
     time = datetime.now(timezone('Asia/Tokyo'))
-    temperature = random.randint(0,100)
+    temperature = np.random.normal(mu, sigma, 1)
 
     json_body = {
         "measurement": measurement,
@@ -40,7 +38,7 @@ for i in range(SEND_NUM):
         },
         "time": str(time),
         "fields": {
-            "value": temperature,
+            "value": int(temperature[0]),
         }
     }
 
