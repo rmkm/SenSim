@@ -1,0 +1,7 @@
+host: "nanos3"
+region: "region2"
+dstIp: "192.168.24.5"
+dstPort: 8080
+numberOfData: 10
+numberOfSocket: 1
+sleepTime: 3
