@@ -1,8 +1,0 @@
-{
-    "host": "nanos3",
-    "region": "region2",
-    "dst ip": "192.168.24.5",
-    "dst port": 8080,
-    "num": 10,
-    "sleep time": 3
-}
