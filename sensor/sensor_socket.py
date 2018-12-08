@@ -1,47 +1,72 @@
-#from collections import OrderedDict
 from pytz import timezone
 from datetime import datetime
 import time as tm
-import socket, sys, json, random
+import numpy as np
+import socket, sys, json, random, yaml, signal
 
-if(len(sys.argv) != 5):
-    print('Usage: ".py [path to json config file] [ip address] [port] [num of data to send]"')
+if(len(sys.argv) != 2):
+    print('Usage: ".py [path to json config file]"')
     sys.exit()
 
-SLP_TIME = 3
+def signal_handler(sig, frame):
+        print('You pressed Ctrl+C!')
+        for i in range(len(socketList)):
+            socketList[i].close()
+        #print(socketList)
+        sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
 PATH = sys.argv[1]
-IP = sys.argv[2]
-PORT = int(sys.argv[3])
-SEND_NUM = int(sys.argv[4])
+configFile = open(PATH, "r");
+configDict = yaml.load(configFile.read())
 
-config_file = open(PATH, "r");
-config_dict = json.loads(config_file.read())
+host = configDict["host"]
+region = configDict["region"]
+dstIp = configDict["dstIp"]
+dstPort = configDict["dstPort"]
+numberOfData = configDict["numberOfData"]
+numberOfSocket = configDict["numberOfSocket"];
+sleepTime = configDict["sleepTime"]
+
 measurement = "temperature"
-host = config_dict["host"]
-region = config_dict["region"]
+mu, sigma = 25, 10
+socketList = []
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((IP, PORT))
+if numberOfSocket > 1:
+    i = 0;
+    while True:
+        if i < numberOfSocket:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((dstIp, dstPort))
+            socketList.append(s)
+            print("socket %d connected" % s.fileno())
+            i += 1
 
-for i in range(SEND_NUM):
-
-    time = datetime.now(timezone('Asia/Tokyo'))
-    temperature = random.randint(0,100)
-
-    json_body = {
-        "measurement": measurement,
-        "tags": {
-            "host": host,
-            "region": region
-        },
-        "time": str(time),
-        "fields": {
-            "value": temperature,
+elif numberOfSocket == 1:
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((dstIp, dstPort))
+    for i in range(numberOfData):
+    
+        time = datetime.now(timezone('Asia/Tokyo'))
+        #temperature = int(np.random.normal(mu, sigma, 1))
+        temperature = random.randint(0,100)
+    
+        json_body = {
+            "measurement": measurement,
+            "tags": {
+                "host": host,
+                "region": region
+            },
+            "time": str(time),
+            "fields": {
+                "value": temperature,
+            }
         }
-    }
+    
+        msg = json.dumps(json_body)
+        msg += "\n"
+    
+        s.send(msg.encode('utf-8'))
+        tm.sleep(sleepTime)
 
-    msg = json.dumps(json_body)
-    msg += "\n"
-
-    s.send(msg.encode('utf-8'))
-    tm.sleep(SLP_TIME)
+    s.close()
