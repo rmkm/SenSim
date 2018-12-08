@@ -64,7 +64,7 @@ elif numberOfSocket == 1:
         }
     
         msg = json.dumps(json_body)
-        msg += "\n"
+        #msg += "\n"
     
         s.send(msg.encode('utf-8'))
         tm.sleep(sleepTime)
