@@ -5,12 +5,11 @@ import numpy as np
 import socket, sys, json, random, yaml, signal
 import asyncio
 
-def signal_handler(sig, frame):
+
+def signal_handler():
         print('You pressed Ctrl+C!')
-        #event_loop.stop()
-        #event_loop.close()
-        sys.exit(0)
-signal.signal(signal.SIGINT, signal_handler)
+        for task in asyncio.Task.all_tasks():
+            task.cancel()
 
 
 def reader(socket):
@@ -79,6 +78,7 @@ def main():
         print('Usage: ".py [path to yaml config file]"')
         sys.exit()
     event_loop = asyncio.get_event_loop()
+    event_loop.add_signal_handler(signal.SIGINT, signal_handler)
     try:
         event_loop.run_until_complete(worker(event_loop))
     finally:
