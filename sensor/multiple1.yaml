@@ -1,8 +1,8 @@
 measurement: "temperature"
 host: "nanos1"
 region: "region1"
-dstIp: "192.168.24.5"
-dstPort: 8080
+destinationIP: "192.168.24.5"
+destinationPORT: 8080
 numberOfData: 10
 numberOfSensor: 5
 sleepTime: 3
