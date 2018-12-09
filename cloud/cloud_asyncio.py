@@ -17,11 +17,10 @@ if "database" in configDict:
     DBname = configDict["database"]
     client = InfluxDBClient(host='localhost', port=8086, database=DBname)
 
-
-def signal_handler(sig, frame):
+def signal_handler():
         print('You pressed Ctrl+C!')
-        sys.exit(0)
-signal.signal(signal.SIGINT, signal_handler)
+        for task in asyncio.Task.all_tasks():
+            task.cancel()
 
 
 async def listener(loop, connection, address):
@@ -53,7 +52,6 @@ async def worker(loop, sock):
 
 
 def main():
-
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.setblocking(False)
@@ -61,6 +59,7 @@ def main():
     sock.listen()
 
     event_loop = asyncio.get_event_loop()
+    event_loop.add_signal_handler(signal.SIGINT, signal_handler)
     try:
         event_loop.run_until_complete(worker(event_loop, sock))
     finally:
