@@ -1,9 +1,7 @@
 from pytz import timezone
 from datetime import datetime
-import time
 import numpy as np
-import socket, sys, json, random, yaml, signal
-import asyncio
+import time, socket, sys, json, random, yaml, signal, asyncio
 
 
 def signal_handler():
@@ -68,7 +66,7 @@ async def worker(loop):
     numberOfSensor = configDict["numberOfSensor"];
     tasks = []
     for i in range(numberOfSensor):
-        delay = random.randint(0,10)
+        delay = random.uniform(0,10)
         tasks.append(sensor(loop, configDict, delay))
     await asyncio.wait(tasks)
 
