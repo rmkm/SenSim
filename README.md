@@ -1,5 +1,5 @@
-# simpleFog
-simpleFog allows you to simulate simple sensor - cloud communication.
+# SenSim
+SenSim(Sensor Simulation) allows you to simulate simple sensor - cloud communication.
 Bare in mind this repository is prototype.
 # How to use
 There are 3 main folders: sensor, fog, cloud.
