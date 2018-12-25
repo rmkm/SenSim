@@ -1,0 +1,20 @@
+destinationIP: 192.168.24.5
+destinationPORT: 8080
+
+# Choose one of the functions in generator.py as a sensor
+function: temperature
+#function: location
+#function: manufacturing
+# Give arguments as a list. Do not comment out "args:"
+args: 
+  - nanos1
+  - block1
+
+# Number of data going to be sent
+numberOfData: 20
+
+# Number of sensors work at the same time
+numberOfSensor: 1
+
+# How often the sensors are going to send data
+sleepTime: 1
