@@ -5,16 +5,17 @@ destinationPORT: 8080
 function: temperature
 #function: location
 #function: manufacturing
+
 # Give arguments as a list. Do not comment out "args:"
 args: 
-  - nanos1
+  - host20
   - block1
 
 # Number of data going to be sent
-numberOfData: 20
+numberOfData: 1800
 
 # Number of sensors work at the same time
-numberOfSensor: 1
+numberOfSensor: 10000
 
 # How often the sensors are going to send data
-sleepTime: 1
+sleepTime: 0.1

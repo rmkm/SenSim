@@ -27,7 +27,9 @@ def temperature(argList):
     assert len(argList) == 2, 'Length of argList must be 2'
 
     host = argList[0]
+    host = 'host' + str(random.randint(10,99))
     region = argList[1]
+    region = 'block' + str(random.randint(1,9))
     timeStamp = datetime.now(timezone('Asia/Tokyo')).strftime('%Y-%m-%d %H:%M:%S')
     temperature = random.randint(0,100)
 
@@ -67,7 +69,7 @@ def location(argList):
         'longitude': longitude,
         'time': str(timeStamp),
         'gender': gender,
-        'age': age
+        'age': str(age)
     }
 
     return json.dumps(dictJson)
@@ -82,28 +84,29 @@ Return:
 
 """
 def manufacturing(argsList):
-    equipment_number = 'com1-1'
+    equipment_number = 'com1'
     timeStamp = datetime.now(timezone('Asia/Tokyo')).strftime('%Y-%m-%d %H:%M:%S')
-    X1 = random.uniform(100,999)
-    X2 = random.uniform(100,999)
-    X3 = random.uniform(100,999)
-    P1 = random.uniform(0,20)
-    P2 = random.uniform(0,20)
-    P3 = random.uniform(0,20)
+    P1 = random.uniform(0,100)
+    P2 = random.uniform(0,100)
+    P3 = random.uniform(0,100)
+    #P1 = random.uniform(0,20)
+    #P2 = random.uniform(0,20)
+    #P3 = random.uniform(0,20)
 
     dictJson = {
         'equipment_number': equipment_number,
         'time': str(timeStamp),
         'sensor_data': {
-            'X1': round(X1, 2),
-            'X2': round(X2, 2),
-            'X3': round(X3, 2)
-        },
-        'control_parameters': {
             'P1': round(P1, 2),
             'P2': round(P2, 2),
             'P3': round(P3, 2)
         }
+        #},
+        #'control_parameters': {
+        #    'P1': round(P1, 2),
+        #    'P2': round(P2, 2),
+        #    'P3': round(P3, 2)
+        #}
     }
     
     return json.dumps(dictJson)

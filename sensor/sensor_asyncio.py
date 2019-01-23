@@ -6,15 +6,18 @@ import generator
 
 def signal_handler():
         print('You pressed Ctrl+C!')
+        #file.close()
         for task in asyncio.Task.all_tasks():
             task.cancel()
 
 
 def reader(socket, start_time):
     end_time = time.clock_gettime(time.CLOCK_MONOTONIC)
-    print("RTT:", end_time - start_time)
+    rtt = (end_time - start_time) * 1000
     data = socket.recv(100)
-    print("Received:", data.decode())
+    if data is not None:
+        print("RTT: {} ms".format(rtt))
+        print("Received:", data.decode())
     
 
 async def sensor(loop, confDict, delay):
@@ -36,7 +39,7 @@ async def sensor(loop, confDict, delay):
     for i in range(numberOfData):
         data = getattr(generator, function)(args)
         
-        print('Send: %r' % data)
+        print('Send: %s' % data)
         start = time.clock_gettime(time.CLOCK_MONOTONIC)
         s.send(data.encode())
         loop.add_reader(s, reader, s, start)
@@ -49,12 +52,14 @@ async def sensor(loop, confDict, delay):
 
 async def worker(loop, confDict):
     numberOfSensor = confDict["numberOfSensor"]
+    sleepTime = confDict["sleepTime"]
     tasks = []
     if numberOfSensor == 1:
         tasks.append(sensor(loop, confDict, 0))
     else:
         for i in range(numberOfSensor):
-            delay = random.uniform(0,10)
+            #delay = random.uniform(0, sleepTime)
+            delay = random.uniform(0, 10)
             tasks.append(sensor(loop, confDict, delay))
     await asyncio.wait(tasks)
 
